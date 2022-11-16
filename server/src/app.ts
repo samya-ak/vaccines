@@ -16,7 +16,6 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(authMiddleware);
-app.use(errorHandler);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Vaccines App is Running");
@@ -38,5 +37,6 @@ app.get("*", (req: Request, res: Response, next: Function) => {
     next
   );
 });
+app.use(errorHandler);
 
 export const db = new Database("./vaccines.db");

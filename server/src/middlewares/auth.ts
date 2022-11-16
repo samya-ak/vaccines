@@ -18,10 +18,10 @@ export const authMiddleware = async (
     token = token.split(" ")[1];
     const decoded = jwt.verify(token, process.env.APP_SECRET || "secret");
     const { id } = decoded as jwt.JwtPayload;
-    console.log("decoded token", decoded);
+    
     const user: User = <User>await getUserById(db, id);
     if (user) {
-      req.body.id = id;
+      req.body.userId = id;
     }
   } catch (e: any) {
     console.error(e);
@@ -35,7 +35,7 @@ export const isAuthenticated = (
   res: Response,
   next: Function
 ) => {
-  if (req.body.id) {
+  if (req.body.userId) {
     return next();
   }
 

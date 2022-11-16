@@ -7,7 +7,6 @@ export const errorHandler = (
   res: Response,
   next: Function
 ) => {
-	console.log("EH: ", error)
   if (error) {
     console.error("Error: ", error.status, error.message);
     const status = error.status || 400;
