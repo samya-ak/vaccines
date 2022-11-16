@@ -1,8 +1,13 @@
 import express, { Application, Request, Response } from "express";
-import Database from "./database";
+import Database from "./services/database";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-
+import authRoutes from "./routes/auth";
+import vaccineRoutes from "./routes/vaccines";
+import dotenv from "dotenv";
+import { authMiddleware, isAuthenticated } from "./middlewares/auth";
+import { errorHandler } from "./middlewares/errorHandler";
+dotenv.config();
 const app: Application = express();
 
 app.use(
@@ -10,6 +15,8 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(authMiddleware);
+app.use(errorHandler);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Vaccines App is Running");
@@ -21,4 +28,15 @@ app.listen(PORT, () => {
   console.log(`server is running on PORT ${PORT}`);
 });
 
-const db = new Database("./vaccines.db")
+app.use("/", authRoutes);
+app.use("/vaccines", isAuthenticated, vaccineRoutes);
+app.get("*", (req: Request, res: Response, next: Function) => {
+  return errorHandler(
+    { status: 404, message: "URL not found" },
+    req,
+    res,
+    next
+  );
+});
+
+export const db = new Database("./vaccines.db");
