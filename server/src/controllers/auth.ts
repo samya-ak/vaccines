@@ -25,9 +25,9 @@ export const signup = async (req: Request, res: Response) => {
     return res.status(422).send({ error: errs });
   }
 
-	const dbUser = <User>await getUserByEmail(db, user.email);
-	if (dbUser) {
-    return res.status(422).send({ error: {"email": "Email already exists."} });
+  const dbUser = <User>await getUserByEmail(db, user.email);
+  if (dbUser) {
+    return res.status(422).send({ error: { email: "Email already exists." } });
   }
 
   const created: boolean = await createUser(db, user);
@@ -56,8 +56,14 @@ export const signin = async (req: Request, res: Response) => {
   const result = await bcrypt.compare(user.password, dbUser.password);
 
   if (result) {
-    const accessToken = encodeToken(dbUser, parseInt(process.env.ACCESS_TOKEN_LIFE || "30") );
-		const refreshToken = encodeToken(dbUser, parseInt(process.env.REFRESH_TOKEN_LIFE || "900"));
+    const accessToken = encodeToken(
+      dbUser,
+      parseInt(process.env.ACCESS_TOKEN_LIFE || "30")
+    );
+    const refreshToken = encodeToken(
+      dbUser,
+      parseInt(process.env.REFRESH_TOKEN_LIFE || "900")
+    );
     return res.json({ status: "Logged In", accessToken, refreshToken });
   } else {
     return res.status(401).send({ error: "Invalid email or password." });
@@ -65,9 +71,7 @@ export const signin = async (req: Request, res: Response) => {
 };
 
 const encodeToken = (tokenData: User, expiry: number) => {
-  return jwt.sign(
-    { id: tokenData.id },
-    process.env.APP_SECRET || "secret",
-    { expiresIn: expiry }
-  ); 
+  return jwt.sign({ id: tokenData.id }, process.env.APP_SECRET || "secret", {
+    expiresIn: expiry,
+  });
 };

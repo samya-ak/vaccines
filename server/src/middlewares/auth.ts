@@ -18,7 +18,7 @@ export const authMiddleware = async (
     token = token.split(" ")[1];
     const decoded = jwt.verify(token, process.env.APP_SECRET || "secret");
     const { id } = decoded as jwt.JwtPayload;
-    
+
     const user: User = <User>await getUserById(db, id);
     if (user) {
       req.body.userId = id;
