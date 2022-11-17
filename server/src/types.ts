@@ -1,10 +1,11 @@
+import { Request } from "express";
 export interface IError {
-	status: number,
-	message: string
+  status: number;
+  message: string;
 }
 
 export interface IVaccine {
-	name: string,
-	description: string,
-	numberOfDoses: number
+  name: string;
+  description: string;
+  numberOfDoses: number;
 }

@@ -1,9 +1,10 @@
 export default class Vaccine {
-  constructor(name: string, numberOfDoses: number, description: string, userId: number) {
+  constructor(name: string, numberOfDoses: number, description: string, userId: number, image: string) {
     this.name = name;
     this.numberOfDoses = numberOfDoses;
     this.description = description;
 		this.userId = userId
+    this.image = image
   }
 
   id!: number;
@@ -11,4 +12,5 @@ export default class Vaccine {
   description!: string;
   numberOfDoses!: number;
 	userId!: number;
+  image!: string;
 }

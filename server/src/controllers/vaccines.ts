@@ -15,9 +15,9 @@ export const remove = async (req: Request, res: Response, next: Function) => {
   if (!exists) {
     return next({ status: 404, message: "Vaccine does not exist" });
   }
-	if(exists.userId !== parseInt(req.body.userId)){
-		return next({ status: 403, message: "Not authorized to delete." });
-	}
+  if (exists.userId !== parseInt(req.body.userId)) {
+    return next({ status: 403, message: "Not authorized to delete." });
+  }
 
   let deleted = await deleteVaccine(db, req.params.id);
   if (!deleted) {
@@ -53,9 +53,9 @@ export const update = async (req: Request, res: Response, next: Function) => {
   if (!exists) {
     return next({ status: 404, message: "Vaccine does not exist" });
   }
-	if(exists.userId !== parseInt(req.params.id)){
-		return next({ status: 403, message: "Not authorized to delete." });
-	}
+  if (exists.userId !== parseInt(req.params.id)) {
+    return next({ status: 403, message: "Not authorized to delete." });
+  }
 
   const errs = validate(req.body);
   if (Object.keys(errs).length > 0) {

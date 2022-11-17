@@ -34,6 +34,7 @@ export default class Database {
         number_of_doses INT NOT NULL,
         user_id INTEGER NOT NULL, 
         mandatory BOOL DEFAULT 0,
+        image TEXT,
         FOREIGN KEY (user_id) REFERENCES users (id))`;
 
     const allergiesTable = `CREATE TABLE IF NOT EXISTS allergies (
