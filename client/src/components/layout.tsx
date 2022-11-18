@@ -1,7 +1,10 @@
 import React from "react";
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { IState } from "../types";
 
-const NavBar: React.FC = () => {
+const Layout: React.FC = () => {
+  const toast = useSelector((state:IState) => state.toast)
   const currentPath = useLocation();
   return (
     <div>
@@ -39,12 +42,31 @@ const NavBar: React.FC = () => {
           </div>
         </div>
       </nav>
-			{currentPath.pathname === "/" && <Navigate to="/vaccines" replace={true}/>}
+      {currentPath.pathname === "/" && (
+        <Navigate to="/vaccines" replace={true} />
+      )}
+
       <div className="container container-md container-sm">
+        <div
+          className={`toast position-absolute ${
+            toast.show ? "show" : ""
+          } text-bg-${toast.type} border-0 mt-3`}
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="d-flex">
+            <div className="toast-body">
+              {toast.message.map((msg, i) => (
+                <div key={i}>{msg}</div>
+              ))}
+            </div>
+          </div>
+        </div>
         <Outlet />
       </div>
     </div>
   );
 };
 
-export default NavBar;
+export default Layout;

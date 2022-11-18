@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import NavBar from "./components/navbar";
+import Layout from "./components/layout";
 import AuthForm from "./components/authForm";
 import Vaccines from "./components/vaccines/list";
 import VaccineForm from "./components/vaccines/form";
@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<NavBar />}>
+        <Route path="/" element={<Layout />}>
           <Route path="signup" element={<AuthForm type="signup" />} />
           <Route path="signin" element={<AuthForm type="signin" />} />
           <Route path="vaccines" element={<Vaccines />} />

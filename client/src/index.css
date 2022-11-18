@@ -23,3 +23,7 @@ code {
 td, th{
   vertical-align: middle !important;
 }
+
+.toast{
+  bottom: 50px;
+}
