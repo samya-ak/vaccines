@@ -20,6 +20,10 @@ code {
   max-width: 60px
 }
 
+.vaccine-img2 {
+  max-width: 150px
+}
+
 td, th{
   vertical-align: middle !important;
 }

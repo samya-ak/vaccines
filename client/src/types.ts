@@ -26,3 +26,12 @@ export interface IUser {
   email: string;
   password: string;
 }
+
+export interface IVaccine {
+  id: number;
+  name: string;
+  numberOfDoses: number;
+  description: string;
+  mandatory: boolean;
+  image: string;
+}

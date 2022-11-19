@@ -6,14 +6,16 @@ export const createVaccine = async (
   vaccine: Vaccine
 ): Promise<boolean> => {
   const insert = `INSERT INTO vaccines
-	(name, description, number_of_doses, user_id)
-	VALUES (?, ?, ?, ?)`;
+	(name, description, number_of_doses, user_id, image, mandatory)
+	VALUES (?, ?, ?, ?, ?, ?)`;
   try {
     await db.run(insert, [
       vaccine.name,
       vaccine.description,
       vaccine.numberOfDoses,
       vaccine.userId,
+      vaccine.image,
+      vaccine.mandatory,
     ]);
     return true;
   } catch (err) {
@@ -27,7 +29,7 @@ export const updateVaccine = async (
   vaccine: Vaccine
 ): Promise<boolean> => {
   const update = `UPDATE vaccines 
-	SET name = ?, description = ?, number_of_doses = ?, user_id = ?
+	SET name = ?, description = ?, number_of_doses = ?, user_id = ?, mandatory = ?, image = ?
 	WHERE id = ?`;
 
   try {
@@ -36,6 +38,8 @@ export const updateVaccine = async (
       vaccine.description,
       vaccine.numberOfDoses,
       vaccine.userId,
+      vaccine.mandatory,
+      vaccine.image,
       vaccine.id,
     ]);
     return true;
@@ -64,7 +68,7 @@ export const listVaccines = async (
   db: Database,
   userId: string
 ): Promise<Vaccine[] | null> => {
-  const list = `SELECT id, name, description, number_of_doses as numberOfDoses, user_id as userId
+  const list = `SELECT id, name, description, number_of_doses as numberOfDoses, user_id as userId, image, mandatory
 		FROM vaccines WHERE user_id = ?`;
   try {
     const vaccines = await db.all(list, [userId]);

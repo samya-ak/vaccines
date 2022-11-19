@@ -48,7 +48,6 @@ const Layout: React.FC = () => {
                 <li
                   className="nav-item cursor-pointer"
                   onClick={() => {
-                    console.log('logout')
                     localStorage.removeItem('user')
                     dispatch(logout());
                   }}

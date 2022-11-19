@@ -11,7 +11,6 @@ const toastReducer =  (state=initialState, action: IAction) => {
     case SHOW_TOAST:
       return {
 				...state,
-				show: true,
         ...action.payload
       };
     default:
