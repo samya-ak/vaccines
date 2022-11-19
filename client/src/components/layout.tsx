@@ -1,10 +1,13 @@
 import React from "react";
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IState } from "../types";
+import { logout } from "../actions/user";
 
 const Layout: React.FC = () => {
-  const toast = useSelector((state:IState) => state.toast)
+  const toast = useSelector((state: IState) => state.toast);
+  const user = useSelector((state: IState) => state.user);
+  const dispatch = useDispatch();
   const currentPath = useLocation();
   return (
     <div>
@@ -17,27 +20,42 @@ const Layout: React.FC = () => {
           </div>
           <div>
             <ul className="nav navbar-nav navbar-right">
-              <li className="nav-item">
-                <Link
-                  className={`nav-link ${
-                    currentPath.pathname === "/signup" ? "active" : ""
-                  }`}
-                  aria-current="page"
-                  to="/signup"
+              {!user.isLoggedIn ? (
+                <>
+                  <li className="nav-item">
+                    <Link
+                      className={`nav-link ${
+                        currentPath.pathname === "/signup" ? "active" : ""
+                      }`}
+                      aria-current="page"
+                      to="/signup"
+                    >
+                      Sign up
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className={`nav-link ${
+                        currentPath.pathname === "/signin" ? "active" : ""
+                      }`}
+                      to="/signin"
+                    >
+                      Sign in
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <li
+                  className="nav-item cursor-pointer"
+                  onClick={() => {
+                    console.log('logout')
+                    localStorage.removeItem('user')
+                    dispatch(logout());
+                  }}
                 >
-                  Sign up
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link ${
-                    currentPath.pathname === "/signin" ? "active" : ""
-                  }`}
-                  to="/signin"
-                >
-                  Sign in
-                </Link>
-              </li>
+                  Log out
+                </li>
+              )}
             </ul>
           </div>
         </div>

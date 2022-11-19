@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showToast } from "../actions/toast";
+import { loginSuccess, loginFail } from "../actions/user";
+import { IUser } from "../types";
+import { signup, signin } from "../api";
+import { useNavigate } from "react-router-dom";
 interface IProps {
   type: string;
-}
-
-interface IUser {
-  email: string;
-  password: string;
 }
 
 interface IError {
@@ -16,9 +15,11 @@ interface IError {
 
 const AuthForm: React.FC<IProps> = (props: IProps) => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   const { type } = props;
   const [user, setUser] = useState<IUser>({ email: "", password: "" });
   const [errs, setErrs] = useState<IError>({});
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const handleInputChanged = (value: string, field: keyof typeof user) => {
     let err = errs;
@@ -50,11 +51,54 @@ const AuthForm: React.FC<IProps> = (props: IProps) => {
     return Object.keys(errors).length > 0;
   };
 
-  const submit = () => {
+  const hideToast = () => {
+    setTimeout(() => {
+      dispatch(showToast({ type: "success", show: false, message: [] }));
+    }, 4000);
+  };
+
+  const signupAction = async () => {
+    try {
+      const res = await signup(user);
+      const message = res.message || "Success!";
+      dispatch(showToast({ type: "success", show: true, message: [message] }));
+    } catch (err: any) {
+      const message = err.cause.error.email || "Something went wrong!";
+      dispatch(showToast({ type: "danger", show: true, message: [message] }));
+    }
+  };
+
+  const signinAction = async () => {
+    try {
+      const res = await signin(user);
+      if(localStorage.getItem('user')){
+        dispatch(loginSuccess())
+        navigate("/vaccines");
+      }
+    } catch (err: any) {
+      const message = err.cause.error || "Something went wrong!";
+      dispatch(loginFail())
+      dispatch(showToast({ type: "danger", show: true, message: [message] }));
+    }
+  };
+
+  const submit = async () => {
     if (hasErrors()) {
       return;
     }
-    console.log("user: ", user);
+
+    setSubmitting(true);
+    switch (type.toLowerCase()) {
+      case "signup":
+        await signupAction();
+        break;
+      case "signin":
+        await signinAction();
+        break;
+    }
+
+    setSubmitting(false);
+    hideToast();
   };
 
   useEffect(() => {
@@ -63,10 +107,9 @@ const AuthForm: React.FC<IProps> = (props: IProps) => {
       for (const [k, v] of Object.entries(errs)) {
         message.push(v);
       }
-      console.log("msg", message);
-      dispatch(showToast({ type: "danger", show: true, message }));
 
-      setTimeout(()=>{dispatch(showToast({ type: "success", show: false, message:[]}));}, 4000)
+      dispatch(showToast({ type: "danger", show: true, message }));
+      hideToast();
     }
   }, [errs]);
 
@@ -105,6 +148,7 @@ const AuthForm: React.FC<IProps> = (props: IProps) => {
           type="button"
           className="btn btn-primary mt-4"
           onClick={() => submit()}
+          disabled={submitting}
         >
           {type.toLowerCase() === "signup" ? "Sign up" : "Sign in"}
         </button>

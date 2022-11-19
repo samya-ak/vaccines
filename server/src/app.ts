@@ -7,9 +7,12 @@ import vaccineRoutes from "./routes/vaccines";
 import dotenv from "dotenv";
 import { authMiddleware, isAuthenticated } from "./middlewares/auth";
 import { errorHandler } from "./middlewares/errorHandler";
+import cors from "cors";
+
 dotenv.config();
 const app: Application = express();
 
+app.use(cors());
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms")
 );
