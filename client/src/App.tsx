@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Layout from "./components/layout";
 import AuthForm from "./components/authForm";
 import Vaccines from "./components/vaccines/list";
@@ -20,13 +20,17 @@ function NotFound() {
 function App() {
   const user = useSelector((state: IState) => state.user);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // navigate to same location after page refresh
     if (localStorage.getItem("user")) {
       dispatch(loginSuccess());
+      navigate(location)
     }
   }, []);
-  
+
   return (
     <>
       <Routes>
@@ -64,7 +68,7 @@ function App() {
             path="vaccines/create"
             element={
               <ProtectedRoute>
-                <VaccineForm type="create" />
+                <VaccineForm type="create"/>
               </ProtectedRoute>
             }
           />
