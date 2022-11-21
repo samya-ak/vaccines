@@ -11,7 +11,7 @@ npm start
 ```
 
 Start server
-- Technologies used: TypeScript, Express, Nhost
+- Technologies used: TypeScript, Express, Nhost, SQLITE db
 - Note: All environment variables are in file named .env.sample. Please edit it to .env before starting the server.
 
 ```bash
