@@ -1,6 +1,8 @@
 # Vaccines
 ### Get Started
 Start client
+- Technologies used: TypeScript, React, Redux, React router
+- Note: All environment variables required are in config.ts
 
 ```bash
 cd client
@@ -9,6 +11,8 @@ npm start
 ```
 
 Start server
+- Technologies used: TypeScript, Express, Nhost
+- Note: All environment variables are in file named .env.sample. Please edit it to .env before starting the server.
 
 ```bash
 cd server
